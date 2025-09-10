@@ -45,6 +45,13 @@ export default defineConfig({
           prodUrl:
             "https://cdn.jsdelivr.net/npm/vega-embed@7.0.2",
         },
+        {
+          name: "acorn",
+          var: "acorn",
+          path: "acorn",
+          prodUrl:
+            "https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.min.js",
+        },
       ],
     }),
     viteSingleFile(),

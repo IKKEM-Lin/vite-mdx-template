@@ -13,6 +13,7 @@
     "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@types/mdx": "^2.0.13",
+    "acorn": "^8.15.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-vega": "^8.0.0",
