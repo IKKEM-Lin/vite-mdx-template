@@ -3,10 +3,13 @@ import react from "@vitejs/plugin-react"; // 或 vue()，按你的项目替换
 import { viteSingleFile } from "vite-plugin-singlefile";
 import { Plugin as importToCDN } from "vite-plugin-cdn-import";
 import { visualizer } from "rollup-plugin-visualizer";
+import path from "path";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     importToCDN({
       prodUrl: "https://cdn.staticfile.net/{name}/{version}/{path}",
       modules: [
@@ -28,22 +31,19 @@ export default defineConfig({
           name: "vega",
           var: "vega",
           path: "vega",
-          prodUrl:
-            "https://cdn.jsdelivr.net/npm/vega@6.1.2",
+          prodUrl: "https://cdn.jsdelivr.net/npm/vega@6.1.2",
         },
         {
           name: "vega-lite",
           var: "vegaLite",
           path: "vega-lite",
-          prodUrl:
-            "https://cdn.jsdelivr.net/npm/vega-lite@6.2.0",
+          prodUrl: "https://cdn.jsdelivr.net/npm/vega-lite@6.2.0",
         },
         {
           name: "vega-embed",
           var: "vegaEmbed",
           path: "vega-embed",
-          prodUrl:
-            "https://cdn.jsdelivr.net/npm/vega-embed@7.0.2",
+          prodUrl: "https://cdn.jsdelivr.net/npm/vega-embed@7.0.2",
         },
         {
           name: "acorn",
@@ -63,6 +63,11 @@ export default defineConfig({
       brotliSize: true,
     }),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   build: {
     target: "es2018",
     cssCodeSplit: false,

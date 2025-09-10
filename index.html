@@ -2,15 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="https://ai4ec.ac.cn/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MLMD Data Report</title>
-    <!-- <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"
-    ></script>
+    <script>
+      function loadScript(src, callback) {
+        var script = document.createElement("script");
+        script.src = src;
+        script.onload = callback;
+        document.head.appendChild(script);
+      }
+    </script>
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"
-    ></script> -->
+      src="https://cdn.jsdelivr.net/npm/@rdkit/rdkit@2023.9.2-1.0.0/dist/RDKit_minimal.min.js"
+      onerror="loadScript('https://ai4ec.ac.cn/apps/chembrain/RDKit_minimal.js')"
+    ></script>
   </head>
   <body>
     <div id="root"></div>

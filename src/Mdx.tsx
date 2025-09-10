@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { compile } from '@mdx-js/mdx';
-import { MDXProvider } from '@mdx-js/react';
-import type { MDXComponents } from 'mdx/types.js';
-import * as runtime from 'react/jsx-runtime';
-import Vega from './Vega';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect } from "react";
+import { compile } from "@mdx-js/mdx";
+import { MDXProvider } from "@mdx-js/react";
+import type { MDXComponents } from "mdx/types.js";
+import * as runtime from "react/jsx-runtime";
+import { Vega, MdxTable, rdkInit, Loading } from "./components";
 
 interface MDXRuntimeProps {
   code: string;
@@ -15,8 +16,9 @@ function MDXRuntime({ code, components }: MDXRuntimeProps) {
 
   useEffect(() => {
     async function run() {
-      const compiled = await compile(code, { outputFormat: 'function-body' });
-      const fn = new Function('React', 'jsx', 'jsxs', String(compiled));
+      await rdkInit();
+      const compiled = await compile(code, { outputFormat: "function-body" });
+      const fn = new Function("React", "jsx", "jsxs", String(compiled));
       const { default: MDXContent } = fn(
         runtime,
         (runtime as any).jsx,
@@ -27,7 +29,10 @@ function MDXRuntime({ code, components }: MDXRuntimeProps) {
     run();
   }, [code]);
 
-  if (!Comp) return <p>loading...</p>;
+  if (!Comp)
+    return (
+      <Loading />
+    );
 
   return (
     <MDXProvider components={components}>
@@ -38,11 +43,13 @@ function MDXRuntime({ code, components }: MDXRuntimeProps) {
 
 export default function App() {
   const mdxSource = `
-# Hello MDX (TS)
+# MLMD Report
 
 This is **runtime compiled** with TypeScript.
 
 <button onClick={() => alert("clicked")}>Click me</button>
+
+<MdxTable />
 
 <Vega spec={{
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
@@ -82,8 +89,8 @@ This is **runtime compiled** with TypeScript.
   `;
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <MDXRuntime code={mdxSource} components={{ Vega: Vega }} />
-    </div>
+    <article className="prose lg:prose-xl">
+      <MDXRuntime code={mdxSource} components={{ Vega: Vega, MdxTable }} />
+    </article>
   );
 }
