@@ -1,29 +1,65 @@
 import { Table, TableBody, TableCaption, TableHeader, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import React from "react";
 
-interface MdxTableProps {
-    children?: React.ReactNode;
+// 定义表格列的配置
+interface TableColumn {
+  key: string;
+  title: string;
+  className?: string;
 }
 
-const MdxTable: React.FC<MdxTableProps> = ({children}) => {
+// 定义表格数据项的类型
+interface TableDataItem {
+  [key: string]: React.ReactNode;
+}
+
+// 定义组件的 props
+interface MdxTableProps {
+  columns: TableColumn[];
+  data: TableDataItem[];
+  caption?: string;
+  className?: string;
+  captionClassName?: string;
+  headerRowClassName?: string;
+  bodyRowClassName?: string;
+  cellClassName?: string;
+}
+
+const MdxTable: React.FC<MdxTableProps> = ({
+  columns,
+  data,
+  caption,
+  className,
+  captionClassName,
+  headerRowClassName,
+  bodyRowClassName,
+  cellClassName,
+}) => {
   return (
-    <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+    <Table className={className}>
+      {caption && <TableCaption className={captionClassName}>{caption}</TableCaption>}
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+        <TableRow className={headerRowClassName}>
+          {columns.map((column) => (
+            <TableHead key={column.key} className={column.className}>
+              {column.title}
+            </TableHead>
+          ))}
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">INV001</TableCell>
-          <TableCell>Paid{children}</TableCell>
-          <TableCell>Credit Card</TableCell>
-          <TableCell className="text-right">$250.00</TableCell>
-        </TableRow>
+        {data.map((row, rowIndex) => (
+          <TableRow key={rowIndex} className={bodyRowClassName}>
+            {columns.map((column) => (
+              <TableCell 
+                key={column.key} 
+                className={cellClassName}
+              >
+                {row[column.key]}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );

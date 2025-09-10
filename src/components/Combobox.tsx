@@ -19,32 +19,40 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+// 定义选项的数据结构
+interface ComboboxOption {
+  value: string
+  label: string
+}
 
-export function Combobox() {
+// 定义组件的 props
+interface ComboboxProps {
+  options: ComboboxOption[]
+  value?: string
+  onValueChange?: (value: string) => void
+  placeholder?: string
+  searchPlaceholder?: string
+  emptyText?: string
+  className?: string
+  popoverClassName?: string
+}
+
+export const Combobox: React.FC<ComboboxProps> = ({
+  options,
+  value,
+  onValueChange,
+  placeholder = "Select...",
+  searchPlaceholder = "Search...",
+  emptyText = "No results found.",
+  className,
+  popoverClassName,
+}) => {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [internalValue, setInternalValue] = React.useState("")
+
+  // 使用受控或非受控模式
+  const currentValue = value !== undefined ? value : internalValue
+  const setValue = onValueChange !== undefined ? onValueChange : setInternalValue
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,34 +61,34 @@ export function Combobox() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn("w-[200px] justify-between", className)}
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+          {currentValue
+            ? options.find((option) => option.value === currentValue)?.label
+            : placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className={cn("w-[200px] p-0", popoverClassName)}>
         <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
+          <CommandInput placeholder={searchPlaceholder} className="h-9" />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {options.map((option) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={option.value}
+                  value={option.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                    setValue(currentValue === currentValue ? "" : currentValue)
                     setOpen(false)
                   }}
                 >
-                  {framework.label}
+                  {option.label}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      currentValue === option.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
